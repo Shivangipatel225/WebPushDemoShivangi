@@ -43,6 +43,7 @@
         window.addEventListener('load', function() {
             navigator.serviceWorker.register('/WebPushDemoShivangi/firebase-messaging-sw.js')
                 .then(function(swReg) {
+                    firebase.initializeApp(firebaseConfig);
                     firebase.messaging().useServiceWorker(swReg);
                     console.log('Service Worker is registered', swReg);
 

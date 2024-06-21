@@ -23,8 +23,8 @@
 <section class="subscription-details js-subscription-details is-invisible">
     <pre><code class="js-subscription-json"></code></pre>
 </section>
-<script src="https://www.gstatic.com/firebasejs/7.17.0/firebase-app-compat.js" type="module"></script>
-<script src="https://www.gstatic.com/firebasejs/7.17.0/firebase-messaging-compat.js" type="module"></script>
+<script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js" type="module"></script>
+<script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-messaging-compat.js" type="module"></script>
 <script type="module">
 
     const firebaseConfig = {
@@ -43,8 +43,21 @@
         window.addEventListener('load', function() {
             navigator.serviceWorker.register('/WebPushDemoShivangi/firebase-messaging-sw.js')
                 .then(function(swReg) {
-                    firebase.initializeApp(firebaseConfig);
-                    firebase.messaging().useServiceWorker(swReg);
+                    firebase.initializeApp(firebaseConfig)
+                    const messagingObject = firebase.messaging();
+            
+                    // Set VAPID key
+                    messagingObject.getToken({serviceWorkerRegistration: swReg,  vapidKey: 'BEmAVlZuKUS6BKpeU4PZg9XFsihcXgfg_4l2MC-9l2El79yKlSlc2RhL1WKEiKwaB8_3JORdF4WL25fC-5M4v1k' }).then((currentToken) => {
+                        if (currentToken) {
+                            //const url = 'http://localhost:8080/register?token=' + encodeURIComponent(currentToken) + '&user=shivangi';
+                            //fetch(url, { method: 'post'});
+                            console.log('Token:', currentToken);
+                        } else {
+                            console.log('No registration token available. Request permission to generate one.');
+                        }
+                    }).catch((err) => {
+                        console.log('An error occurred while retrieving token. ', err);
+                    });
                     console.log('Service Worker is registered', swReg);
 
                     swRegistration = swReg;

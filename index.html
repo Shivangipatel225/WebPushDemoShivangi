@@ -18,8 +18,7 @@
 
 </head>
 <body>
-    <input type="text" id="userInput" placeholder="Enter user">
-    <button id="runScript">Run Script</button>
+<button class="js-push-btn">Enable/Disable Push Notifications</button>
 </body>
 <section class="subscription-details js-subscription-details is-invisible">
     <pre><code class="js-subscription-json"></code></pre>
@@ -48,12 +47,10 @@
                     const messagingObject = firebase.messaging();
             
                     // Set VAPID key
-                    document.getElementById('runScript').addEventListener('click', function() {
                     messagingObject.getToken({serviceWorkerRegistration: swReg,  vapidKey: 'BEmAVlZuKUS6BKpeU4PZg9XFsihcXgfg_4l2MC-9l2El79yKlSlc2RhL1WKEiKwaB8_3JORdF4WL25fC-5M4v1k' }).then((currentToken) => {
                         if (currentToken) {
-                            const user = document.getElementById('userInput').value;
-                            const url = 'http://localhost:8080/register?token=' + encodeURIComponent(currentToken) + '&user=' + encodeURIComponent(user);
-                            fetch(url, { method: 'post'});
+                            //const url = 'http://localhost:8080/register?token=' + encodeURIComponent(currentToken) + '&user=shivangi';
+                            //fetch(url, { method: 'post'});
                             console.log('Token:', currentToken);
                         } else {
                             console.log('No registration token available. Request permission to generate one.');
@@ -70,7 +67,6 @@
                     console.error('Service Worker Error', error);
                 });
         })
-    });
     }else {
         console.warn('Push messaging is not supported');
     }

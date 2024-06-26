@@ -37,7 +37,13 @@
         measurementId: "G-22L57Q8N5Q"
     };
     let swRegistration = null;
-    if ('serviceWorker' in navigator && 'PushManager' in window) {
+    if ('safari' in window && 'pushNotification' in window.safari){
+        console.log('Safari Push Notifications are supported');
+
+        const permissionData = window.safari.pushNotification.permission('web.adobe.ans.test');
+        checkRemotePermission(permissionData);
+    }
+    else if ('serviceWorker' in navigator && 'PushManager' in window) {
 
         console.log('Service Worker and Push are supported');
         window.addEventListener('load', function() {
@@ -67,11 +73,6 @@
                     console.error('Service Worker Error', error);
                 });
         })
-    }else if ('safari' in window && 'pushNotification' in window.safari){
-        console.log('Safari Push Notifications are supported');
-
-        const permissionData = window.safari.pushNotification.permission('web.adobe.ans.test');
-        checkRemotePermission(permissionData);
     }
     else {
         console.warn('Push messaging is not supported');

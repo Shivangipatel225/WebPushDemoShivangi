@@ -45,8 +45,14 @@
         document.addEventListener('DOMContentLoaded', function() {
             const button = document.getElementById('subscribeButton'); // Replace with your button ID
             button.addEventListener('click', function() {
-                const permissionData = window.safari.pushNotification.permission('web.adobe.ans.test');
-                checkRemotePermission(permissionData);
+                window.safari.pushNotification.requestPermission(
+                'https://shivangipatel225.github.io', // Your website URL
+                'web.adobe.ans.test', // Your website Push ID
+                {}, // Data to send with the permission request, if needed
+                function(permissionData) {
+                    handlePermissionResult(permissionData);
+                }
+            );
             });
         });
     }
@@ -85,26 +91,14 @@
         console.warn('Push messaging is not supported');
     }
 
-    function checkRemotePermission(permissionData) {
-        if (permissionData.permission === 'default') {
-            console.log('Push notifications permission not yet granted');
-            // Request permission from the user
-            window.safari.pushNotification.requestPermission(
-                'https://shivangipatel225.github.io', // Your website URL
-                'web.adobe.ans.test', // Your website Push ID
-                {}, // Data to send with the permission request, if needed
-                function(permissionData) {
-                    console.log('Permission Data:', permissionData);
-                    checkRemotePermission(permissionData); // Check permission status again
-                }
-            );
-        } else if (permissionData.permission === 'denied') {
+    function handlePermissionResult(permissionData) {
+        if (permissionData.permission === 'denied') {
             console.warn('Push notifications permission denied');
         } else if (permissionData.permission === 'granted') {
             console.log('Push notifications permission granted');
-            //const deviceToken = permissionData.deviceToken;
+            const deviceToken = permissionData.deviceToken;
             //const url = 'http://localhost:8080/register?token=' + encodeURIComponent(deviceToken) + '&user=shivangi';
-            fetch(url, { method: 'post'});
+            //fetch(url, { method: 'post'});
             console.log('APNS Device Token:', deviceToken);
         }
     }

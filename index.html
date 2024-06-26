@@ -39,9 +39,15 @@
     let swRegistration = null;
     if ('safari' in window && 'pushNotification' in window.safari){
         console.log('Safari Push Notifications are supported');
-
-        const permissionData = window.safari.pushNotification.permission('web.adobe.ans.test');
-        checkRemotePermission(permissionData);
+        
+        // Wait for a user gesture to prompt for push notification permission
+        document.addEventListener('DOMContentLoaded', function() {
+            const button = document.getElementById('subscribeButton'); // Replace with your button ID
+            button.addEventListener('click', function() {
+                const permissionData = window.safari.pushNotification.permission('web.adobe.ans.test');
+                checkRemotePermission(permissionData);
+            });
+        });
     }
     else if ('serviceWorker' in navigator && 'PushManager' in window) {
 
